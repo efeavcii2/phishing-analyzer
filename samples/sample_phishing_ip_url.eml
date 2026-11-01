@@ -1,0 +1,25 @@
+Delivered-To: victim@example.com
+Received: from mail.suspicious-infra.example (mail.suspicious-infra.example [192.0.2.50])
+	by mx.example.com with ESMTPS id ip001
+	for <victim@example.com>; Sat, 01 Nov 2026 11:00:00 +0000 (UTC)
+Authentication-Results: mx.example.com;
+	spf=fail smtp.mailfrom=alert@microsoft-secure-login.example;
+	dkim=none;
+	dmarc=fail (p=REJECT) header.from=microsoft-secure-login.example
+From: "Microsoft Account Team" <alert@microsoft-secure-login.example>
+Reply-To: alert@microsoft-secure-login.example
+Return-Path: <alert@microsoft-secure-login.example>
+To: victim@example.com
+Subject: Unusual sign-in activity detected
+Date: Sat, 01 Nov 2026 11:00:00 +0000
+Message-ID: <ip001@microsoft-secure-login.example>
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+<html>
+<body>
+<p>We detected unusual sign-in activity on your Microsoft account.</p>
+<p><a href="http://192.0.2.50/secure/login?verify=1">Review activity</a></p>
+</body>
+</html>

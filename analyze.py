@@ -10,6 +10,7 @@ import sys
 
 from phishing_analyzer.checks import (
     check_authentication_results,
+    check_ip_based_url,
     check_link_mismatch,
     check_sender_mismatch,
     check_suspicious_language,
@@ -36,6 +37,7 @@ def main(argv: list[str]) -> int:
         + check_authentication_results(parsed)
         + check_link_mismatch(links)
         + check_suspicious_language(body_text)
+        + check_ip_based_url(links)
     )
 
     print(render_report(parsed, links, findings))

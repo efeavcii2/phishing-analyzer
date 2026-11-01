@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ipaddress
 import re
 from dataclasses import dataclass
 from enum import Enum
@@ -146,6 +147,45 @@ def check_authentication_results(parsed: ParsedEmail) -> list[Finding]:
                 message=f"{mechanism.upper()} sonucu '{result}' - basarisiz/supheli dogrulama.",
             )
         )
+
+    return findings
+
+
+def _is_ip_address(netloc: str) -> bool:
+    """netloc'un (port/kullanici bilgisi olmadan) ciplak bir IP adresi olup olmadigini kontrol eder."""
+    host = netloc.split("@")[-1].split(":")[0].strip("[]")
+    try:
+        ipaddress.ip_address(host)
+        return True
+    except ValueError:
+        return False
+
+
+def check_ip_based_url(links: list[ExtractedLink]) -> list[Finding]:
+    """Href'i domain yerine ciplak IP adresi olan linkleri tespit eder.
+
+    Mesru kurumsal/servis mailleri hemen hemen hic dogrudan IP adresine
+    link vermez (DNS/SSL sertifika yonetimi acisindan pratik degil). Bir
+    linkin ciplak bir IP'ye gitmesi bu yuzden guclu bir phishing isaretidir.
+    """
+    findings: list[Finding] = []
+
+    for link in links:
+        if not link.href:
+            continue
+        netloc = _netloc(link.href)
+        if netloc and _is_ip_address(netloc):
+            findings.append(
+                Finding(
+                    check="ip_based_url",
+                    severity=Severity.HIGH,
+                    message=(
+                        f"Link dogrudan bir IP adresine gidiyor ({netloc}), domain "
+                        f"adi degil. Mesru servisler bunu neredeyse hic yapmaz - "
+                        f"guclu bir phishing/kotu amacli altyapi isareti."
+                    ),
+                )
+            )
 
     return findings
 
