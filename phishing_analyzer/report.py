@@ -6,6 +6,7 @@ from phishing_analyzer.attachments import Attachment
 from phishing_analyzer.checks import Finding, Severity
 from phishing_analyzer.links import ExtractedLink
 from phishing_analyzer.parsing import ParsedEmail
+from phishing_analyzer.scoring import RiskScore
 
 _SEVERITY_ORDER = {
     Severity.HIGH: 0,
@@ -20,12 +21,16 @@ def render_report(
     links: list[ExtractedLink],
     findings: list[Finding],
     attachments: list[Attachment] | None = None,
+    risk: RiskScore | None = None,
 ) -> str:
     lines: list[str] = []
 
     lines.append("=" * 60)
     lines.append("PHISHING ANALIZ RAPORU")
     lines.append("=" * 60)
+    if risk is not None:
+        lines.append(f"RISK SEVIYESI: {risk.level} (puan: {risk.score})")
+        lines.append("")
     lines.append(f"Konu        : {parsed.subject}")
     lines.append(f"Tarih       : {parsed.date}")
     lines.append(f"From        : {parsed.from_display!r} <{parsed.from_address}>")

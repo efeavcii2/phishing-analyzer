@@ -21,6 +21,7 @@ from phishing_analyzer.checks import (
 from phishing_analyzer.links import extract_links, get_body_text, html_to_text
 from phishing_analyzer.parsing import load_eml, parse_headers
 from phishing_analyzer.report import render_report
+from phishing_analyzer.scoring import compute_risk_score
 from phishing_analyzer.threat_intel import check_attachment_hashes, check_urlhaus
 
 
@@ -50,7 +51,8 @@ def main(argv: list[str]) -> int:
         + check_attachment_hashes(attachments)
     )
 
-    print(render_report(parsed, links, findings, attachments))
+    risk = compute_risk_score(findings)
+    print(render_report(parsed, links, findings, attachments, risk))
     return 0
 
 
