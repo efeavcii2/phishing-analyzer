@@ -20,6 +20,7 @@ from phishing_analyzer.checks import (
 from phishing_analyzer.links import extract_links, get_body_text, html_to_text
 from phishing_analyzer.parsing import load_eml, parse_headers
 from phishing_analyzer.report import render_report
+from phishing_analyzer.threat_intel import check_urlhaus
 
 
 def main(argv: list[str]) -> int:
@@ -33,6 +34,7 @@ def main(argv: list[str]) -> int:
     html_body, plain_body = get_body_text(msg)
     links = extract_links(html_body) if html_body else []
     body_text = html_to_text(html_body) if html_body else plain_body
+    hrefs = [link.href for link in links if link.href]
 
     findings = (
         check_sender_mismatch(parsed)
@@ -42,6 +44,7 @@ def main(argv: list[str]) -> int:
         + check_ip_based_url(links)
         + check_lookalike_domain(parsed, links)
         + check_punycode_domain(parsed, links)
+        + check_urlhaus(hrefs)
     )
 
     print(render_report(parsed, links, findings))
