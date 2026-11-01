@@ -1,6 +1,8 @@
 ============================================================
 PHISHING ANALIZ RAPORU
 ============================================================
+RISK SEVIYESI: YUKSEK (puan: 82)
+
 Konu        : Acil: Hesabiniz 24 saat icinde kapatilacak!
 Tarih       : Sat, 01 Nov 2026 10:15:28 +0000
 From        : 'PayPal Security' <security@paypa1-verify.com>
@@ -14,15 +16,22 @@ Received zinciri (2 hop):
 Linkler (1):
   'https://www.paypal.com/myaccount/verify' -> http://paypa1-verify-secure.ru/login?id=92341
 
+Ekler (0):
+  (ek bulunamadi)
+
 ------------------------------------------------------------
-BULGULAR (6)
+BULGULAR (10)
 ------------------------------------------------------------
   [YUKSEK] sender_mismatch: From domaini (paypa1-verify.com) ile Return-Path domaini (totally-different-domain.ru) uyusmuyor. Gorunen gonderici ile gercek zarf adresi farkli - klasik spoofing isareti.
   [YUKSEK] spf_fail: SPF sonucu 'fail' - basarisiz/supheli dogrulama.
   [YUKSEK] dkim_fail: DKIM sonucu 'fail' - basarisiz/supheli dogrulama.
   [YUKSEK] dmarc_fail: DMARC sonucu 'fail' - basarisiz/supheli dogrulama.
   [YUKSEK] link_mismatch: Gorunen link 'https://www.paypal.com/myaccount/verify' (www.paypal.com) gostermesine ragmen gercek adres paypa1-verify-secure.ru'e gidiyor. Klasik link gizleme/phishing teknigi.
+  [YUKSEK] lookalike_domain: Domain 'paypa1-verify.com' bilinen marka 'paypal' adini iceriyor ama gercek 'paypal' domaini degil. Klasik typosquatting/marka taklidi teknigi.
+  [YUKSEK] lookalike_domain: Domain 'paypa1-verify-secure.ru' bilinen marka 'paypal' adini iceriyor ama gercek 'paypal' domaini degil. Klasik typosquatting/marka taklidi teknigi.
   [ORTA  ] reply_to_mismatch: Reply-To domaini (totally-different-domain.ru) From domaininden (paypa1-verify.com) farkli. Yanitlarin farkli bir adrese yonlendirilmesi phishing kampanyalarinda yaygindir.
+  [ORTA  ] suspicious_language_aciliyet_dili: 'aciliyet_dili' kategorisinde supheli ifade(ler) bulundu: 24 saat
+  [ORTA  ] suspicious_language_hesap_tehdidi: 'hesap_tehdidi' kategorisinde supheli ifade(ler) bulundu: hesabiniz kalici olarak kapat, kimliginizi dogrula
 
-Ozet: YUKSEK: 5, ORTA: 1
+Ozet: YUKSEK: 7, ORTA: 3
 ============================================================
