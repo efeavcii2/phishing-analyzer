@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import sys
 
+from phishing_analyzer.checks import check_sender_mismatch
 from phishing_analyzer.parsing import load_eml, parse_headers
 
 
@@ -28,6 +29,13 @@ def main(argv: list[str]) -> int:
     print(f"Received zinciri ({len(parsed.received_chain)} hop):")
     for i, hop in enumerate(parsed.received_chain, 1):
         print(f"  [{i}] {hop}")
+
+    findings = check_sender_mismatch(parsed)
+    print(f"\nBulgular ({len(findings)}):")
+    if not findings:
+        print("  (gonderen uyumsuzlugu tespit edilmedi)")
+    for f in findings:
+        print(f"  [{f.severity.value}] {f.check}: {f.message}")
 
     return 0
 
