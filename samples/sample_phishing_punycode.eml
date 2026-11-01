@@ -1,0 +1,22 @@
+Delivered-To: victim@example.com
+Received: from mail.xn--pypal-4ve.com (mail.xn--pypal-4ve.com [203.0.113.80])
+	by mx.example.com with ESMTPS id puny001
+	for <victim@example.com>; Sat, 01 Nov 2026 12:00:00 +0000 (UTC)
+Authentication-Results: mx.example.com;
+	spf=pass smtp.mailfrom=service@xn--pypal-4ve.com;
+	dkim=pass header.d=xn--pypal-4ve.com;
+	dmarc=pass header.from=xn--pypal-4ve.com
+From: "PayPal" <service@xn--pypal-4ve.com>
+Reply-To: service@xn--pypal-4ve.com
+Return-Path: <service@xn--pypal-4ve.com>
+To: victim@example.com
+Subject: Your account statement is ready
+Date: Sat, 01 Nov 2026 12:00:00 +0000
+Message-ID: <puny001@xn--pypal-4ve.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Your monthly account statement is now available.
+
+Log in to view your statement.

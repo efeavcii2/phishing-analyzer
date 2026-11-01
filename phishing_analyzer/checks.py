@@ -151,6 +151,102 @@ def check_authentication_results(parsed: ParsedEmail) -> list[Finding]:
     return findings
 
 
+def _gather_domains(parsed: ParsedEmail, links: list[ExtractedLink]) -> list[str]:
+    """From/Return-Path/Reply-To ve tum link hreflerinden domain listesi cikarir."""
+    domains = [
+        _domain(parsed.from_address),
+        _domain(parsed.return_path),
+        _domain(parsed.reply_to_address),
+    ]
+    for link in links:
+        if link.href:
+            domains.append(_netloc(link.href))
+    return [d for d in domains if d]
+
+
+_LEETSPEAK_MAP = str.maketrans({"0": "o", "1": "l", "3": "e", "5": "s", "8": "b"})
+
+# Sik hedef alinan marka adlari (SLD, TLD'siz). Genisletilebilir liste.
+_KNOWN_BRANDS = [
+    "paypal", "google", "microsoft", "apple", "amazon", "facebook",
+    "outlook", "instagram", "netflix", "github", "linkedin", "chase",
+    "bankofamerica", "wellsfargo", "dropbox", "adobe", "whatsapp",
+]
+
+
+def check_lookalike_domain(parsed: ParsedEmail, links: list[ExtractedLink]) -> list[Finding]:
+    """Bilinen marka adlarini taklit eden (typosquat) domainleri tespit eder.
+
+    Iki teknigi birden yakalar:
+    1. Leetspeak/karakter degisimi (paypa1.com -> "paypal" ile eslesir)
+    2. Marka adinin baska bir domaine eklenmesi (paypal-verify-secure.com)
+    Gercek marka domaininin kendisi (ornek: paypal.com, github.com) atlanir.
+    """
+    findings: list[Finding] = []
+    seen: set[str] = set()
+
+    for domain in _gather_domains(parsed, links):
+        if _is_ip_address(domain):
+            continue
+
+        base = _base_domain(domain)
+        if base in seen:
+            continue
+
+        sld = base.split(".")[0] if "." in base else base
+        normalized_sld = sld.translate(_LEETSPEAK_MAP)
+
+        for brand in _KNOWN_BRANDS:
+            if sld == brand:
+                break  # gercek marka SLD'si, sorun yok
+            if brand in normalized_sld or brand in sld:
+                findings.append(
+                    Finding(
+                        check="lookalike_domain",
+                        severity=Severity.HIGH,
+                        message=(
+                            f"Domain '{base}' bilinen marka '{brand}' adini "
+                            f"iceriyor ama gercek '{brand}' domaini degil. "
+                            f"Klasik typosquatting/marka taklidi teknigi."
+                        ),
+                    )
+                )
+                seen.add(base)
+                break
+
+    return findings
+
+
+def check_punycode_domain(parsed: ParsedEmail, links: list[ExtractedLink]) -> list[Finding]:
+    """Punycode (xn--) etiketi iceren domainleri tespit eder.
+
+    IDN/punycode, homoglif (gorsel olarak ozdes gorunen) karakterlerle
+    marka taklidi yapmak icin kotuye kullanilabilir (ornek: Kiril 'а'
+    harfi Latin 'a' gibi gorunur). Mesru servisler bunu nadiren kullanir.
+    """
+    findings: list[Finding] = []
+    seen: set[str] = set()
+
+    for domain in _gather_domains(parsed, links):
+        if domain in seen or _is_ip_address(domain):
+            continue
+        if any(label.startswith("xn--") for label in domain.split(".")):
+            findings.append(
+                Finding(
+                    check="punycode_domain",
+                    severity=Severity.MEDIUM,
+                    message=(
+                        f"Domain '{domain}' punycode (xn--) etiketi iceriyor. "
+                        f"Bu, homoglif karakterlerle marka taklidi yapmak icin "
+                        f"kullanilabilen bir teknik."
+                    ),
+                )
+            )
+            seen.add(domain)
+
+    return findings
+
+
 def _is_ip_address(netloc: str) -> bool:
     """netloc'un (port/kullanici bilgisi olmadan) ciplak bir IP adresi olup olmadigini kontrol eder."""
     host = netloc.split("@")[-1].split(":")[0].strip("[]")
