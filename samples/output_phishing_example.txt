@@ -1,0 +1,28 @@
+============================================================
+PHISHING ANALIZ RAPORU
+============================================================
+Konu        : Acil: Hesabiniz 24 saat icinde kapatilacak!
+Tarih       : Sat, 01 Nov 2026 10:15:28 +0000
+From        : 'PayPal Security' <security@paypa1-verify.com>
+Reply-To    : '' <urgent-support@totally-different-domain.ru>
+Return-Path : bounce@totally-different-domain.ru
+
+Received zinciri (2 hop):
+  [1] from mail.totally-different-domain.ru (mail.totally-different-domain.ru [203.0.113.5]) by mx.example.com with ESMTPS id abc123 for <victim@example.com>; Sat, 01 Nov 2026 10:15:32 +0000 (UTC)
+  [2] from localhost (localhost [127.0.0.1]) by mail.totally-different-domain.ru (Postfix) with ESMTP id def456 for <victim@example.com>; Sat, 01 Nov 2026 10:15:30 +0000 (UTC)
+
+Linkler (1):
+  'https://www.paypal.com/myaccount/verify' -> http://paypa1-verify-secure.ru/login?id=92341
+
+------------------------------------------------------------
+BULGULAR (6)
+------------------------------------------------------------
+  [YUKSEK] sender_mismatch: From domaini (paypa1-verify.com) ile Return-Path domaini (totally-different-domain.ru) uyusmuyor. Gorunen gonderici ile gercek zarf adresi farkli - klasik spoofing isareti.
+  [YUKSEK] spf_fail: SPF sonucu 'fail' - basarisiz/supheli dogrulama.
+  [YUKSEK] dkim_fail: DKIM sonucu 'fail' - basarisiz/supheli dogrulama.
+  [YUKSEK] dmarc_fail: DMARC sonucu 'fail' - basarisiz/supheli dogrulama.
+  [YUKSEK] link_mismatch: Gorunen link 'https://www.paypal.com/myaccount/verify' (www.paypal.com) gostermesine ragmen gercek adres paypa1-verify-secure.ru'e gidiyor. Klasik link gizleme/phishing teknigi.
+  [ORTA  ] reply_to_mismatch: Reply-To domaini (totally-different-domain.ru) From domaininden (paypa1-verify.com) farkli. Yanitlarin farkli bir adrese yonlendirilmesi phishing kampanyalarinda yaygindir.
+
+Ozet: YUKSEK: 5, ORTA: 1
+============================================================

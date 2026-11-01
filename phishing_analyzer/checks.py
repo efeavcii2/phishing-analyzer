@@ -5,7 +5,9 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from enum import Enum
+from urllib.parse import urlparse
 
+from phishing_analyzer.links import ExtractedLink
 from phishing_analyzer.parsing import ParsedEmail
 
 
@@ -120,5 +122,47 @@ def check_authentication_results(parsed: ParsedEmail) -> list[Finding]:
                 message=f"{mechanism.upper()} sonucu '{result}' - basarisiz/supheli dogrulama.",
             )
         )
+
+    return findings
+
+
+def _looks_like_url(text: str) -> bool:
+    return bool(re.match(r"^(https?://|www\.)", text.strip(), re.IGNORECASE))
+
+
+def _netloc(url: str) -> str:
+    if not re.match(r"^https?://", url, re.IGNORECASE):
+        url = "http://" + url
+    return urlparse(url).netloc.lower()
+
+
+def check_link_mismatch(links: list[ExtractedLink]) -> list[Finding]:
+    """Gorunen link metni ile gercek href'in gittigi domain farkli mi kontrol eder.
+
+    Phishing e-postalari genelde gorunurde tanidik bir domain (paypal.com)
+    gosterirken, linki gercekte baska bir domaine (saldirgan altyapisi)
+    yonlendirir. Bu klasik "link gizleme" teknigidir.
+    """
+    findings: list[Finding] = []
+
+    for link in links:
+        if not link.href or not _looks_like_url(link.display_text):
+            continue
+
+        display_domain = _netloc(link.display_text)
+        href_domain = _netloc(link.href)
+
+        if display_domain and href_domain and display_domain != href_domain:
+            findings.append(
+                Finding(
+                    check="link_mismatch",
+                    severity=Severity.HIGH,
+                    message=(
+                        f"Gorunen link '{link.display_text}' ({display_domain}) "
+                        f"gostermesine ragmen gercek adres {href_domain}'e gidiyor. "
+                        f"Klasik link gizleme/phishing teknigi."
+                    ),
+                )
+            )
 
     return findings
