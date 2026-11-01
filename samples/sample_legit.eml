@@ -1,0 +1,29 @@
+Delivered-To: victim@example.com
+Received: from mail.github.com (mail.github.com [192.0.2.10])
+	by mx.example.com with ESMTPS id xyz789
+	for <victim@example.com>; Sat, 01 Nov 2026 09:00:12 +0000 (UTC)
+Authentication-Results: mx.example.com;
+	spf=pass (sender IP is 192.0.2.10) smtp.mailfrom=notifications@github.com;
+	dkim=pass header.d=github.com;
+	dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=github.com
+From: "GitHub" <notifications@github.com>
+Reply-To: notifications@github.com
+Return-Path: <notifications@github.com>
+To: victim@example.com
+Subject: [example/repo] New issue opened
+Date: Sat, 01 Nov 2026 09:00:10 +0000
+Message-ID: <issue-123@github.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Hi,
+
+A new issue was opened in example/repo:
+
+"Build fails on main branch"
+
+View it here: https://github.com/example/repo/issues/42
+
+Thanks,
+The GitHub Team

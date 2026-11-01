@@ -1,0 +1,32 @@
+Delivered-To: victim@example.com
+Received: from mail.totally-different-domain.ru (mail.totally-different-domain.ru [203.0.113.5])
+	by mx.example.com with ESMTPS id abc123
+	for <victim@example.com>; Sat, 01 Nov 2026 10:15:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.totally-different-domain.ru (Postfix) with ESMTP id def456
+	for <victim@example.com>; Sat, 01 Nov 2026 10:15:30 +0000 (UTC)
+Authentication-Results: mx.example.com;
+	spf=fail (sender IP is 203.0.113.5) smtp.mailfrom=bounce@totally-different-domain.ru;
+	dkim=fail header.d=paypa1-verify.com;
+	dmarc=fail (p=REJECT sp=REJECT dis=NONE) header.from=paypa1-verify.com
+From: "PayPal Security" <security@paypa1-verify.com>
+Reply-To: urgent-support@totally-different-domain.ru
+Return-Path: <bounce@totally-different-domain.ru>
+To: victim@example.com
+Subject: Acil: Hesabiniz 24 saat icinde kapatilacak!
+Date: Sat, 01 Nov 2026 10:15:28 +0000
+Message-ID: <abc123@totally-different-domain.ru>
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+<html>
+<body>
+<p>Sayin Musterimiz,</p>
+<p>Hesabinizda supheli bir aktivite tespit ettik. Hesabinizin kapanmasini onlemek icin
+<b>24 saat icinde</b> kimliginizi dogrulamaniz gerekmektedir.</p>
+<p><a href="http://paypa1-verify-secure.ru/login?id=92341">https://www.paypal.com/myaccount/verify</a></p>
+<p>Dogrulamazsaniz hesabiniz kalici olarak kapatilacaktir.</p>
+<p>Saygilarimizla,<br>PayPal Guvenlik Ekibi</p>
+</body>
+</html>
