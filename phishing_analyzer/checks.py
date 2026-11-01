@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from enum import Enum
 
@@ -65,6 +66,58 @@ def check_sender_mismatch(parsed: ParsedEmail) -> list[Finding]:
                     f"({from_domain}) farkli. Yanitlarin farkli bir adrese "
                     f"yonlendirilmesi phishing kampanyalarinda yaygindir."
                 ),
+            )
+        )
+
+    return findings
+
+
+# spf/dkim/dmarc sonuc siddetleri. "pass" icin bulgu uretmiyoruz.
+_AUTH_SEVERITY = {
+    "fail": Severity.HIGH,
+    "softfail": Severity.MEDIUM,
+    "none": Severity.LOW,
+    "neutral": Severity.LOW,
+    "temperror": Severity.LOW,
+    "permerror": Severity.MEDIUM,
+}
+
+
+def check_authentication_results(parsed: ParsedEmail) -> list[Finding]:
+    """Authentication-Results basligindan SPF/DKIM/DMARC sonuclarini yorumlar.
+
+    Bu baslik, alici mail sunucusunun gonderici dogrulama protokollerini
+    calistirdiktan sonra ekledigi sonuc ozetidir - mail istemcisi tarafindan
+    degil, alici tarafindan uretilir, bu yuzden From basligindan daha
+    guvenilir bir imza kaynagidir.
+    """
+    findings: list[Finding] = []
+    header = parsed.authentication_results
+
+    if not header:
+        findings.append(
+            Finding(
+                check="auth_results_missing",
+                severity=Severity.LOW,
+                message=(
+                    "Authentication-Results basligi yok, SPF/DKIM/DMARC "
+                    "sonucu dogrulanamiyor."
+                ),
+            )
+        )
+        return findings
+
+    for mechanism, result in re.findall(r"\b(spf|dkim|dmarc)=(\w+)", header, re.IGNORECASE):
+        mechanism = mechanism.lower()
+        result = result.lower()
+        if result == "pass":
+            continue
+        severity = _AUTH_SEVERITY.get(result, Severity.LOW)
+        findings.append(
+            Finding(
+                check=f"{mechanism}_{result}",
+                severity=severity,
+                message=f"{mechanism.upper()} sonucu '{result}' - basarisiz/supheli dogrulama.",
             )
         )
 
