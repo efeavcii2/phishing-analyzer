@@ -29,3 +29,8 @@ def load_env() -> None:
 def get_urlhaus_auth_key() -> str | None:
     load_env()
     return os.environ.get("URLHAUS_AUTH_KEY") or None
+
+
+def get_virustotal_api_key() -> str | None:
+    load_env()
+    return os.environ.get("VIRUSTOTAL_API_KEY") or None

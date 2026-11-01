@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from phishing_analyzer.attachments import Attachment
 from phishing_analyzer.checks import Finding, Severity
 from phishing_analyzer.links import ExtractedLink
 from phishing_analyzer.parsing import ParsedEmail
@@ -15,7 +16,10 @@ _SEVERITY_ORDER = {
 
 
 def render_report(
-    parsed: ParsedEmail, links: list[ExtractedLink], findings: list[Finding]
+    parsed: ParsedEmail,
+    links: list[ExtractedLink],
+    findings: list[Finding],
+    attachments: list[Attachment] | None = None,
 ) -> str:
     lines: list[str] = []
 
@@ -39,6 +43,16 @@ def render_report(
         lines.append("  (govdede link bulunamadi)")
     for link in links:
         lines.append(f"  '{link.display_text}' -> {link.href}")
+    lines.append("")
+
+    attachments = attachments or []
+    lines.append(f"Ekler ({len(attachments)}):")
+    if not attachments:
+        lines.append("  (ek bulunamadi)")
+    for att in attachments:
+        lines.append(f"  {att.filename} ({att.content_type}, {att.size} byte)")
+        lines.append(f"    md5:    {att.md5}")
+        lines.append(f"    sha256: {att.sha256}")
     lines.append("")
 
     sorted_findings = sorted(findings, key=lambda f: _SEVERITY_ORDER.get(f.severity, 99))

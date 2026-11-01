@@ -11,10 +11,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+from phishing_analyzer.attachments import Attachment
 from phishing_analyzer.checks import Finding, Severity
-from phishing_analyzer.config import get_urlhaus_auth_key
+from phishing_analyzer.config import get_urlhaus_auth_key, get_virustotal_api_key
 
 _URLHAUS_ENDPOINT = "https://urlhaus-api.abuse.ch/v1/url/"
+_VIRUSTOTAL_FILE_ENDPOINT = "https://www.virustotal.com/api/v3/files/{sha256}"
 _TIMEOUT_SECONDS = 10
 
 
@@ -89,5 +91,95 @@ def check_urlhaus(urls: list[str]) -> list[Finding]:
                 )
             )
         # status == "no_results" / "invalid_url" icin bulgu uretmiyoruz
+
+    return findings
+
+
+def query_virustotal_hash(sha256: str, api_key: str) -> dict | None:
+    """VirusTotal'da bir SHA256 hash'ini sorgular (GET /files/{hash}).
+
+    Hash hic analiz edilmemisse (404) {'found': False} doner.
+    Ag hatasi/zaman asimi durumunda None doner.
+    """
+    url = _VIRUSTOTAL_FILE_ENDPOINT.format(sha256=sha256)
+    request = urllib.request.Request(url, headers={"x-apikey": api_key})
+    try:
+        with urllib.request.urlopen(request, timeout=_TIMEOUT_SECONDS) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return {"found": False}
+        return None
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ValueError):
+        return None
+
+
+def check_attachment_hashes(attachments: list[Attachment]) -> list[Finding]:
+    """Her ek dosyanin SHA256 hash'ini VirusTotal'da sorgular.
+
+    Hic ek yoksa veya VIRUSTOTAL_API_KEY tanimli degilse ag cagrisi
+    yapilmaz. Hash VirusTotal'da bilinmiyorsa (daha once analiz
+    edilmemis) bulgu uretilmez - bu "guvenli" demek degildir, sadece
+    "bilgi yok" demektir.
+    """
+    if not attachments:
+        return []
+
+    api_key = get_virustotal_api_key()
+    if not api_key:
+        return [
+            Finding(
+                check="virustotal_skipped",
+                severity=Severity.INFO,
+                message=(
+                    "VIRUSTOTAL_API_KEY .env'de tanimli degil, ek hash kontrolu "
+                    "atlandi. Ucretsiz key: virustotal.com hesap ayarlari."
+                ),
+            )
+        ]
+
+    findings: list[Finding] = []
+    for att in attachments:
+        result = query_virustotal_hash(att.sha256, api_key)
+        if result is None:
+            findings.append(
+                Finding(
+                    check="virustotal_unreachable",
+                    severity=Severity.INFO,
+                    message=f"VirusTotal sorgusu yapilamadi: {att.filename}",
+                )
+            )
+            continue
+
+        if not result.get("found", True) and "data" not in result:
+            continue  # hash VirusTotal'da hic yok, bulgu uretme
+
+        stats = result.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
+        malicious = stats.get("malicious", 0)
+        suspicious = stats.get("suspicious", 0)
+
+        if malicious > 0:
+            findings.append(
+                Finding(
+                    check="attachment_known_malware",
+                    severity=Severity.HIGH,
+                    message=(
+                        f"Ek '{att.filename}' (sha256:{att.sha256[:16]}...) "
+                        f"VirusTotal'da {malicious} motor tarafindan ZARARLI "
+                        f"olarak isaretlendi ({suspicious} supheli)."
+                    ),
+                )
+            )
+        elif suspicious > 0:
+            findings.append(
+                Finding(
+                    check="attachment_suspicious",
+                    severity=Severity.MEDIUM,
+                    message=(
+                        f"Ek '{att.filename}' VirusTotal'da {suspicious} motor "
+                        f"tarafindan supheli olarak isaretlendi."
+                    ),
+                )
+            )
 
     return findings

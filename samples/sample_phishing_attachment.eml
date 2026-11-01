@@ -1,0 +1,31 @@
+Delivered-To: victim@example.com
+Received: from mail.fake-invoice-example.com (mail.fake-invoice-example.com [203.0.113.90])
+	by mx.example.com with ESMTPS id att001
+	for <victim@example.com>; Sat, 01 Nov 2026 13:00:00 +0000 (UTC)
+Authentication-Results: mx.example.com;
+	spf=fail smtp.mailfrom=billing@fake-invoice-example.com;
+	dkim=none;
+	dmarc=fail header.from=fake-invoice-example.com
+From: "Faturalama" <billing@fake-invoice-example.com>
+Reply-To: billing@fake-invoice-example.com
+Return-Path: <billing@fake-invoice-example.com>
+To: victim@example.com
+Subject: Faturaniz ekte
+Date: Sat, 01 Nov 2026 13:00:00 +0000
+Message-ID: <att001@fake-invoice-example.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY123"
+
+--BOUNDARY123
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Lutfen ekteki faturanizi kontrol edin.
+
+--BOUNDARY123
+Content-Type: application/octet-stream; name="fatura.txt"
+Content-Disposition: attachment; filename="fatura.txt"
+Content-Transfer-Encoding: base64
+
+SGVsbG8sIHRoaXMgaXMgYSBoYXJtbGVzcyB0ZXN0IGF0dGFjaG1lbnQgZm9yIHRoZSBwaGlzaGluZyBhbmFseXplciBwcm9qZWN0Lg==
+--BOUNDARY123--
