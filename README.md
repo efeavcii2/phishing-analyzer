@@ -34,8 +34,18 @@ BULGULAR (6)
 Ozet: YUKSEK: 5, ORTA: 1
 ```
 
-Ayni arac `samples/sample_legit.eml` (gercek bir GitHub bildirimi) icin
-0 bulgu donduruyor - yani false positive uretmiyor.
+Ayni arac `samples/sample_legit.eml` icin 0 bulgu donduruyor - yani false
+positive uretmiyor.
+
+**False positive hikayesi:** Araci kendi gercek GitHub bildirim mailimle
+(`samples/sample_legit_github_notification.eml`) test ederken ilk versiyon
+1 yanlis bulgu uretti: `reply_to_mismatch`. Sebebi, GitHub'in yanitlari
+`reply.github.com` alt-domaininden islemesi - From ise `github.com`. Tam
+domain karsilastirmasi bunu "farkli domain" sayiyordu. Duzeltme: domain
+karsilastirmasini "temel domain"e (son iki etiket, `_base_domain()`)
+indirdim, boylece `reply.github.com` ile `github.com` ayni sayiliyor ama
+`totally-different-domain.ru` ile `paypa1-verify.com` hala farkli
+sayiliyor. Gercek veriyle test etmeden bu hata fark edilmezdi.
 
 ## Durum
 

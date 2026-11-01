@@ -1,0 +1,232 @@
+Received: from GV2PR03MB435740.eurprd03.prod.outlook.com
+ (2603:10a6:150:37e::20) by PA1PR03MB11017.eurprd03.prod.outlook.com with
+ HTTPS; Fri, 23 Oct 2026 17:21:12 +0000
+Received: from CYXPR03CA0070.namprd03.prod.outlook.com (2603:10b6:930:d1::8)
+ by GV2PR03MB435740.eurprd03.prod.outlook.com (2603:10a6:150:37e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.15; Fri, 23 Oct
+ 2026 17:21:11 +0000
+Received: from EA8PEPF00000008.namprd05.prod.outlook.com
+ (2603:10b6:930:d1:cafe::14) by CYXPR03CA0070.outlook.office365.com
+ (2603:10b6:930:d1::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.546.19 via Frontend Transport; Fri,
+ 23 Oct 2026 17:21:09 +0000
+Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP is
+ 192.30.252.198) smtp.mailfrom=github.com; dkim=pass (signature was verified)
+ header.d=github.com;dmarc=pass action=none
+ header.from=github.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of github.com designates
+ 192.30.252.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=192.30.252.198; helo=out-7.smtp.github.com; pr=C
+Received: from out-7.smtp.github.com (192.30.252.198) by
+ EA8PEPF00000008.mail.protection.outlook.com (10.167.249.231) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.569.4
+ via Frontend Transport; Fri, 23 Oct 2026 17:21:09 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:1D5D3F78F8341617BC18E54331D13C5E6E95DD447D30EC9EB731FB5A9427596D;UpperCasedChecksum:DAA6A91BC9FE469D86736B9806EE16E30801ABFF39DE828196F7AB20C29CADBE;SizeAsReceived:2499;Count:27
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=github.com;
+	s=pf2026; t=1792776069;
+	bh=j7nUXc4loZ8f7Jnd5Fsetz6PTJMZk3b5AcYJyRkKaP0=;
+	h=Date:From:Reply-To:To:Cc:In-Reply-To:References:Subject:List-ID:
+	 List-Archive:List-Post:List-Unsubscribe:List-Unsubscribe-Post:
+	 From;
+	b=GIVuWTd07JoJ2amj/m4+U4Nq7+SQETgs/323/aLuZQMKukjgrgKyXEhuCO/Axa5oP
+	 60mOAh/T78e96aZPNIVHDJ006TgW4kHwfjjifc9oXk3bxzE3QwHDrQICOk0eESl/mp
+	 JuTQFlapPHaMZFwlu9FOGO+kFTHUm7rlW+wDhG8SHH1ferMm98UaC4/etSgCmdK3aH
+	 tw8aifHfcC01JXfeqjMYZ5MlKF/Z3lbCxxdJp/VrYNGi1PqMFYlWcSzNthi1BsdaJM
+	 RDP+fSOZS1zuR7rFqEG6wkOSjK7N+dZ9LgYIqgKcA1kRJkc9YufB2pEfECc1CtXk+5
+	 PStiJjXD1d1BQ==
+Received: from github.com (hubbernetes-node-e5deb81.va3-iad.github.net [10.48.140.38])
+	by smtp.github.com (Postfix) with ESMTPA id 87CE4481309
+	for <efeavcii2@outlook.com>; Fri, 23 Oct 2026 10:21:09 -0700 (PDT)
+Date: Fri, 23 Oct 2026 10:21:09 -0700
+From: Lance Pioch <notifications@github.com>
+Reply-To: pelican/panel <reply+AYCD57WLY7CCHLWBY4UKNFDLKTXZLEVBMHHAACJHBA@reply.github.com>
+To: pelican/panel <panel@noreply.github.com>
+Cc: EFE AVCI <efeavcii2@outlook.com>, 
+ Comment <comment@noreply.github.com>
+Message-ID: <pelican/panel/repository-advisories/599816/comments/338241@github.com>
+In-Reply-To: <pelican/panel/repository-advisories/GHSA-75w2-w835-jp9q@github.com>
+References: <pelican/panel/repository-advisories/GHSA-75w2-w835-jp9q@github.com>
+Subject: Re: [pelican/panel]   Non-Constant-Time API Token Comparison in
+ ApiKey::findToken() (Timing Side-Channel) (GHSA-75w2-w835-jp9q)
+Content-Type: multipart/alternative;
+	boundary="--==_mimepart_6adb978585905_db1298257860"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Precedence: list
+X-GitHub-Sender: lancepioch
+X-GitHub-Recipient: efeavcii2
+X-GitHub-Reason: comment
+List-ID: pelican/panel <panel.pelican.github.com>
+List-Archive: https://github.com/pelican/panel
+List-Post: <mailto:reply+AYCD57WLY7CCHLWBY4UKNFDLKTXZLEVBMHHAACJHBA@reply.github.com>
+List-Unsubscribe: <mailto:unsub+AYCD57WLY7CCHLWBY4UKNFDLKTXZLEVBMHHAACJHBA@reply.github.com>,
+ <https://github.com/notifications/unsubscribe/one-click/AYCD57UZG2DT3IVOZTE66ZT5VOHQLAVCNFSNUABOKJSXA33TNF2G64TZHM3TONBSGU4DSNRTHNJGK4DPONUXI33SPFAWI5TJONXXE6J3GU4TSOBRG2QXMAQ>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-GitHub-Notify-Platform: newsies
+X-Auto-Response-Suppress: All
+destinations: efeavcii2@outlook.com
+X-GitHub-Recipient-Address: efeavcii2@outlook.com
+X-IncomingHeaderCount: 27
+Return-Path: noreply@github.com
+X-MS-Exchange-Organization-ExpirationStartTime: 23 Oct 2026 17:21:09.8873
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id: e83c4dd5-aeaa-4c46-98b6-08df312a07c8
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: EA8PEPF00000008:EE_|GV2PR03MB435740:EE_|PA1PR03MB11017:EE_
+X-MS-Exchange-Organization-AuthSource: EA8PEPF00000008.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 10/23/2026 5:02:42 PM
+X-MS-Office365-Filtering-Correlation-Id: e83c4dd5-aeaa-4c46-98b6-08df312a07c8
+X-Sender-IP: 192.30.252.198
+X-MS-Exchange-EOPDirect: true
+X-SID-PRA: NOTIFICATIONS@GITHUB.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:1;ARA:1444111002|32060799003|260928210016899003|68400799013|3069299007|5149299006|10300799038|9400799043|260826003000599003|56899033|4302099013|440099028|3412199025|1380799030|1370799030|1360799030|1602099012|30041999003|5090599003|2406899039;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2026 17:21:09.7095
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e83c4dd5-aeaa-4c46-98b6-08df312a07c8
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource: EA8PEPF00000008.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR03MB435740
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.0199660
+X-MS-Exchange-Processed-By-BccFoldering: 15.21.0546.016
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000311)(920221119095)(90000117)(920221120095)(90010023)(91010020)(91040095)(9050020)(9100341)(944500132)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Ty80VDVlTUJpSEhWdnMyVldKQzlBUXMzcXNPN3VQdGRUT1daQy9MZTBIMHlZ?=
+ =?utf-8?B?ZytMZlkraWFsWHhUUFo0UURZL0RSakcyc0EvZUZETmpQejl4ZUpsVFJqdzFU?=
+ =?utf-8?B?VEFqOVdQWXlqYWlDeVlJc2REdDg5eFhnUGJrWEVQK3U4YXBrdWx6SVBFL05O?=
+ =?utf-8?B?RlBvOWoyVUJyZkowY2QwbFdFTFdQNTkxL1pYVS9nYW84MzNKVFNrdXgxT0px?=
+ =?utf-8?B?Y3Evd2dFa2MzWHAzUno0SFVpNmUyRDZaKzdtQVRWTjduM2t6WkljYnB0WDlj?=
+ =?utf-8?B?dGpmTnhwa1NORXpFVHh6UFF1Z3ptb005MU1JSmJVMk1pZ3dvZVF4dDAyOG5H?=
+ =?utf-8?B?SWd3R2h1RCtSMWdGNWVqU28zQlNFRVBOczlvT214b2ZybzUzY1FvcTVXTHZ3?=
+ =?utf-8?B?Q2J6dEZxR1N2MVRPbjRCSGp2TzRlM2ROYlRWaXNwT0pzU3BPcWpISVY5V2Fz?=
+ =?utf-8?B?SFFQUGltenJTVDUrWFNQZ0tLMTNLblRJeUd3VTFubTlzSTAybFFFQkNWcnFP?=
+ =?utf-8?B?V3JlMjZHQmMzeURqcnhUbFNGSU9vdnFLTjZrb3czMUZ0V0FYWFRMK24yak1B?=
+ =?utf-8?B?RjhwZ0p2SEEyRHVrVUtTcVdvQjVEQ0FDbFQ1WjZXY2RtUTVhOHowUHF6ejFn?=
+ =?utf-8?B?N1VJMEJLYktzUzFxWTBORnFvOVFWREhscDZjTGlqbFR6Umt1Zkt1V1hURnpt?=
+ =?utf-8?B?M3Z3QnVUajNjMmhBMXRDbHJQcER5RTVRMUpScnh4eWNmWDZSQWsva09xbERS?=
+ =?utf-8?B?cHh1Q0hVTkNIUEhjMTRUZ2lleE9MemQrdTBsZGpTc2RTczRhLysvVUlkcmwv?=
+ =?utf-8?B?aXBqOEc4bmgzSkEvZitUQXZIWlNlVXRuYXk0azRaejd4NVlERFM3dXNHS0JR?=
+ =?utf-8?B?RFNQdkVkbm02Q3RzVUZsaHFZeXo1d2ZYSTFtWWtETWdZWEsrMXB2ZG1ab3JM?=
+ =?utf-8?B?aUNoaTRzbnFLK0toY3pVWU5JbXM3QUN1WDZMdkk1ZklwV1k0SElYdEZLWDZX?=
+ =?utf-8?B?eDRFdVFjYS8rb2VPWlFEeGF1bmpnamRIb0h2UmN1WWRNOWVKNk0vSWxTY0ww?=
+ =?utf-8?B?cTIvN29DMHBFdG1KSWtOeTFyRytXM3VZb2Q2ZkU0cjZLMHQ3ekRQREtHa25F?=
+ =?utf-8?B?VzZ2WE9BZTlrMUg5QzdKcmh0VmsyanZxL3lIeHdyc2FCQkNlMVZOenVzM2Fh?=
+ =?utf-8?B?c1JaOHJtUTdZYWcwTks1R3FwR1FWM0pxeUxBQTlVOVpwKys2eWRZVC9oTkdp?=
+ =?utf-8?B?RmVrRCtPekUvZHJIbzVPU21OZmJBeG1QeHYvN1JjaERLcTkvaHlGYzRlQTRy?=
+ =?utf-8?B?Tk1kNE4raEZEbU5RSE9YVXFhOUFwdjAvQ1dndjFVNkJjVDhkejVhZkJ1elNZ?=
+ =?utf-8?B?VkV5ZVZKUW8rNWUxUDBVbVpDMFhvb1I4eGdRaEpydGxEUytJTDd1bElYUmky?=
+ =?utf-8?B?MTIyNE1hMyt1bTR5c3NWcXBqN0xGajdzTTdXRjJFY293dzNjc2NENmZUcVBE?=
+ =?utf-8?B?OUtmcUMvcDN5cFQzZUVqOHh5bTlpUXVsbkRjNm01UWpQWDdhYmFlRTZyVkVS?=
+ =?utf-8?B?U1FxTDFpNDZGTDl3UlN4K3NxSzkxd25lT0E1Vnd0YWo2aHdJZ2p6VDFVYlpw?=
+ =?utf-8?B?Rm1rclk5a0pjenE0WWcxNHdLYzFNOVZrTTJJN25YZndBZlJtMWlVNnZ3M2l5?=
+ =?utf-8?B?aVVJRk1nQi94WWwxUThKRGpOaGJjbGNvYXdOZUpaTlBQdm40eHhWUE5ZcXJh?=
+ =?utf-8?B?T0dmTmlaU2dOZ2wrTVk4YkJITC82TExEZ1FGTnVJZWROUFh0Zk1ESE0zZWQy?=
+ =?utf-8?B?cVY0MnZxUndpN25OY3Rka1M1UlRrZWpqNEdjbGhML1F0cDEySVhiZVk5Zk5Y?=
+ =?utf-8?B?Um5FMmZUZ1hTaC9SbHgrak1lY3RvOWR3SENkODFuMm1VenBWMGtFU1hMZm1a?=
+ =?utf-8?B?d2xKV0laNmVHdWtjWmIyTUxqbVplY3NGMWlHWGUveFc0TDJLNTdIaGZCZVdr?=
+ =?utf-8?B?dHk2a01HWDl4UDRRUWJWcVRTWStrOE9BQU1zRjdWcWFnOERmUGFTTDJqSTFq?=
+ =?utf-8?B?eWJyUlgvTm1ycjBVZGdDL3pkdWNFYnBuUEE1TWZ6MlpSNkFRcDRGMG9mU0ZU?=
+ =?utf-8?B?ZStEQUlrSUhJcmVEVDUxeS9mcmdzYTdTeXlaMjhnam5sWHBHTE01MmdHOC9G?=
+ =?utf-8?B?eDRmdmg5QUppMXB3TGoxK2VBdHNUWGV1QXBxMFFpOURyaWpZZElVak9WRUR1?=
+ =?utf-8?B?MUpPeXlmQy9NWWtYN2ZPRWlhQjdNNithSlJLR2c1czRCTGZrRGlvS3Y4NDJB?=
+ =?utf-8?B?cmo4Tld4U3drS3BqdW5Qc0ZHTy9pbE50N0RpUWptZTFWNm4yRlJFVGdoaTZV?=
+ =?utf-8?B?UHJoZmNGbXArWDgvN3QrY2pJWElHQ0dpR1ZnNUlkV3lUU0NjUmp4aUVaa0d4?=
+ =?utf-8?B?N1dUNDFWL2J2WndkcE45RWZRNkN3UFU0UXVLOTB4NXJ5T1hNSVNWcG9xNGs4?=
+ =?utf-8?B?UzBXYmwvS2xqWk1LUmFVQy9TZXdWTHVmZWxwS2NuZXZYc3VEQTcrUmN2VFU3?=
+ =?utf-8?B?dUp0TjZuK2hFaU9odk5jM0k4NzIrS3lHVFpzSHA1TlMxQ1kyNFdQYnJMS2VM?=
+ =?utf-8?B?V0lta0doMXJtOVN2TnNRUlJsODNacnJPelNRY29SbVAvLzZjcjRkaFVBdGdL?=
+ =?utf-8?B?dnNkMjBsZnU2b3RXT3lIbjhRVHptTHZqbUk1VjRNcFg2WWd3RitXdThFcEZ0?=
+ =?utf-8?B?TlJrZ1dxK3J6ZGFyYTYyM0dVRVl5NVp5YzZrck44NjNnQ1NROWQ4QW96Qy9w?=
+ =?utf-8?B?THNJb3lTNXhsN3MxbnhXelErdzRCdSt5Ly96M1NkUWtsTzgwOFh5SHVGMk9z?=
+ =?utf-8?B?N0dXM2FDaVdRQXdWQ0pjZFo2dz09?=
+MIME-Version: 1.0
+
+----==_mimepart_6adb978585905_db1298257860
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+Thanks for the report. We're closing this as hardening, not a vulnerability. The secret is only compared after a database lookup on the key's 16-character identifier, which is mostly random and isn't exposed to anyone but the key's owner, so an attacker has no way to target a key's secret without already holding most of the token. On top of that, the difference in a 32-byte string compare is nanoseconds, well below the noise of a network round trip through PHP and a database query, and the report includes no measurement showing otherwise. We agree hash_equals() is the better choice there, so feel free to open a regular pull request against main with that change.
+
+-- 
+Reply to this email directly or view it on GitHub:
+https://github.com/pelican/panel/security/advisories/GHSA-75w2-w835-jp9q#advisory-comment-338241
+You are receiving this because you are either an administrator on pelican/panel, or a collaborator on GHSA-75w2-w835-jp9q.
+
+Message ID: <pelican/panel/repository-advisories/599816/comments/338241@github.com>
+----==_mimepart_6adb978585905_db1298257860
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><p=
+></p>
+<p dir=3D"auto">Thanks for the report. We're closing this as hardening, not=
+ a vulnerability. The secret is only compared after a database lookup on th=
+e key's 16-character identifier, which is mostly random and isn't exposed t=
+o anyone but the key's owner, so an attacker has no way to target a key's s=
+ecret without already holding most of the token. On top of that, the differ=
+ence in a 32-byte string compare is nanoseconds, well below the noise of a =
+network round trip through PHP and a database query, and the report include=
+s no measurement showing otherwise. We agree hash_equals() is the better ch=
+oice there, so feel free to open a regular pull request against main with t=
+hat change.</p>
+
+<p style=3D"font-size:small;-webkit-text-size-adjust:none;color:#666;">=E2=
+=80=94<br>Reply to this email directly, <a href=3D"https://github.com/pelic=
+an/panel/security/advisories/GHSA-75w2-w835-jp9q?email_source=3Dnotificatio=
+ns&amp;email_token=3DAYCD57RVVMRG5DH2IJSE7S35VOHQLA5CNFSNUABOM5UWIORPF5TWS5=
+BNNB2WEL2SMVYG643JORXXE6KBMR3GS43POJ4UG33NNVSW45BPGMZTQMRUGGTHEZLBONXW5J3DN=
+5WW2ZLOOSSWK5TFNZ2KYZTPN52GK4S7MNWGSY3L#advisory-comment-338241">view it on=
+ GitHub</a>, or <a href=3D"https://github.com/notifications/unsubscribe-aut=
+h/AYCD57T2XQSSIADH5RJN3EL5VOHQLAVCNFSNUABOKJSXA33TNF2G64TZHM3TONBSGU4DSNRTH=
+NJGK4DPONUXI33SPFAWI5TJONXXE6J3GU4TSOBRG2QXMAQ">unsubscribe</a>.<br>You are=
+ receiving this because you are either an administrator on pelican/panel, o=
+r a collaborator on GHSA-75w2-w835-jp9q.<img src=3D"https://github.com/noti=
+fications/beacon/AYCD57WM745DZ2SB4XVBG3L5VOHQLBFCNFSM6AAAAADC7JG37KWGG33NNV=
+SW45C7OR4XAZNZKJSXA33TNF2G64TZIFSHM2LTN5ZHSQ3PNVWWK3TUVJRW63LNMVXHIX3JMTHAA=
+BJJIGTHEZLBONXW5J3DN5WW2ZLOOQ.gif" height=3D"1" width=3D"1" alt=3D""><span =
+style=3D"color: transparent; font-size: 0; display: none; visibility: hidde=
+n; overflow: hidden; opacity: 0; width: 0; height: 0; max-width: 0; max-hei=
+ght: 0; mso-hide: all">Message ID: <span>&lt;pelican/panel/repository-advis=
+ories/599816/comments/338241</span><span>@</span><span>github</span><span>.=
+</span><span>com&gt;</span></span></p>
+<script type=3D"application/ld+json">[
+{
+"@context": "http://schema.org",
+"@type": "EmailMessage",
+"potentialAction": {
+"@type": "ViewAction",
+"target": "https://github.com/pelican/panel/security/advisories/GHSA-75w2-w=
+835-jp9q?email_source=3Dnotifications\u0026email_token=3DAYCD57V5BLY5QT3PA6=
+HKFI35VOHQLA5CNFSNUABOM5UWIORPF5TWS5BNNB2WEL2SMVYG643JORXXE6KBMR3GS43POJ4UG=
+33NNVSW45BPGMZTQMRUGGTHEZLBONXW5J3DN5WW2ZLOOSSWK5TFNZ2KWZ3NMFUWYX3DNRUWG2Y#=
+advisory-comment-338241",
+"url": "https://github.com/pelican/panel/security/advisories/GHSA-75w2-w835=
+-jp9q?email_source=3Dnotifications\u0026email_token=3DAYCD57V5BLY5QT3PA6HKF=
+I35VOHQLA5CNFSNUABOM5UWIORPF5TWS5BNNB2WEL2SMVYG643JORXXE6KBMR3GS43POJ4UG33N=
+NVSW45BPGMZTQMRUGGTHEZLBONXW5J3DN5WW2ZLOOSSWK5TFNZ2KWZ3NMFUWYX3DNRUWG2Y#adv=
+isory-comment-338241",
+"name": "View Repository Advisory"
+},
+"description": "View this Repository Advisory on GitHub",
+"publisher": {
+"@type": "Organization",
+"name": "GitHub",
+"url": "https://github.com"
+}
+}
+]</script>=
+
+----==_mimepart_6adb978585905_db1298257860--

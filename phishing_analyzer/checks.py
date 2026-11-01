@@ -32,12 +32,28 @@ def _domain(address: str) -> str:
     return address.rsplit("@", 1)[-1].lower()
 
 
+def _base_domain(domain: str) -> str:
+    """Kaba bir 'temel domain' cikarimi: son iki etiketi alir.
+
+    Tam bir public suffix list kontrolu yapmaz (ornegin ikili TLD'lerde
+    - "foo.co.uk" gibi - yanlis sonuc verebilir) ama "reply.github.com"
+    gibi mesru alt-domain kullanimlarini "github.com" ile eslestirmek
+    icin bu proje kapsaminda yeterlidir. Gercek testte GitHub'in Reply-To
+    icin reply.github.com kullanmasi, tam domain karsilastirmasinin false
+    positive urettigini gosterdi - bu yuzden eklendi.
+    """
+    parts = domain.split(".")
+    if len(parts) <= 2:
+        return domain
+    return ".".join(parts[-2:])
+
+
 def check_sender_mismatch(parsed: ParsedEmail) -> list[Finding]:
     """From / Return-Path / Reply-To domainlerini karsilastirir.
 
     Return-Path, mesaji gercekte kimin gonderdigini (zarf adresi) gosterir;
     From ise kullaniciya gosterilen, kolayca sahtelestirilebilen basliktir.
-    Bu ikisinin domaini farkliysa klasik bir spoofing/phishing isaretidir.
+    Bu ikisinin temel domaini farkliysa klasik bir spoofing/phishing isaretidir.
     """
     findings: list[Finding] = []
 
@@ -45,7 +61,11 @@ def check_sender_mismatch(parsed: ParsedEmail) -> list[Finding]:
     return_path_domain = _domain(parsed.return_path)
     reply_to_domain = _domain(parsed.reply_to_address)
 
-    if from_domain and return_path_domain and from_domain != return_path_domain:
+    if (
+        from_domain
+        and return_path_domain
+        and _base_domain(from_domain) != _base_domain(return_path_domain)
+    ):
         findings.append(
             Finding(
                 check="sender_mismatch",
@@ -58,7 +78,11 @@ def check_sender_mismatch(parsed: ParsedEmail) -> list[Finding]:
             )
         )
 
-    if reply_to_domain and from_domain and reply_to_domain != from_domain:
+    if (
+        reply_to_domain
+        and from_domain
+        and _base_domain(reply_to_domain) != _base_domain(from_domain)
+    ):
         findings.append(
             Finding(
                 check="reply_to_mismatch",
@@ -152,7 +176,11 @@ def check_link_mismatch(links: list[ExtractedLink]) -> list[Finding]:
         display_domain = _netloc(link.display_text)
         href_domain = _netloc(link.href)
 
-        if display_domain and href_domain and display_domain != href_domain:
+        if (
+            display_domain
+            and href_domain
+            and _base_domain(display_domain) != _base_domain(href_domain)
+        ):
             findings.append(
                 Finding(
                     check="link_mismatch",
