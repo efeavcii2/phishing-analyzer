@@ -12,8 +12,9 @@ from phishing_analyzer.checks import (
     check_authentication_results,
     check_link_mismatch,
     check_sender_mismatch,
+    check_suspicious_language,
 )
-from phishing_analyzer.links import extract_links, get_body_text
+from phishing_analyzer.links import extract_links, get_body_text, html_to_text
 from phishing_analyzer.parsing import load_eml, parse_headers
 from phishing_analyzer.report import render_report
 
@@ -26,13 +27,15 @@ def main(argv: list[str]) -> int:
     msg = load_eml(argv[1])
     parsed = parse_headers(msg)
 
-    html_body, _plain_body = get_body_text(msg)
+    html_body, plain_body = get_body_text(msg)
     links = extract_links(html_body) if html_body else []
+    body_text = html_to_text(html_body) if html_body else plain_body
 
     findings = (
         check_sender_mismatch(parsed)
         + check_authentication_results(parsed)
         + check_link_mismatch(links)
+        + check_suspicious_language(body_text)
     )
 
     print(render_report(parsed, links, findings))

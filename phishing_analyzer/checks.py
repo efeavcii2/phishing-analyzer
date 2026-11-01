@@ -194,3 +194,67 @@ def check_link_mismatch(links: list[ExtractedLink]) -> list[Finding]:
             )
 
     return findings
+
+
+# Kategori -> o kategoriyi temsil eden regex desenleri.
+# Turkce (diyakritiksiz, cogu phishing orneginde oldugu gibi) ve Ingilizce
+# kaliplari birlikte ariyoruz.
+_SUSPICIOUS_LANGUAGE_PATTERNS: dict[str, list[str]] = {
+    "aciliyet_dili": [
+        r"\bacil\b",
+        r"\bhemen\b",
+        r"\bşimdi\b",
+        r"\bsimdi\b",
+        r"24 saat",
+        r"son şans",
+        r"son sans",
+        r"\burgent\b",
+        r"\bimmediately\b",
+        r"act now",
+        r"within 24 hours",
+    ],
+    "hesap_tehdidi": [
+        r"hesab[ıi]n[ıi]z\w*.{0,25}(kapat|ask[ıi]ya|dondur|kilit)",
+        r"account.{0,20}(suspend|clos|lock|restrict)",
+        r"kimli[gğ]inizi do[gğ]rula",
+        r"verify your (account|identity)",
+        r"[sş]ifrenizi (g[uü]ncelle|de[gğ][iı][sş]tir)",
+    ],
+    "sahte_odul": [
+        r"tebrikler\w*.{0,20}kazand",
+        r"congratulations.{0,20}(won|winner)",
+        r"claim your (prize|reward)",
+        r"[oö]d[uü]l[uü]n[uü]z[uü]? talep",
+    ],
+}
+
+
+def check_suspicious_language(body_text: str) -> list[Finding]:
+    """Govde metninde aciliyet/tehdit/sahte odul dili arar.
+
+    Bu tek basina kesin bir phishing kaniti degildir (meşru pazarlama
+    mailleri de "hemen al" diyebilir) - bu yuzden MEDIUM siddette, destekleyici
+    bir sinyal olarak eklenir, teknik bulgularin (domain/SPF/link) yanina.
+    """
+    findings: list[Finding] = []
+
+    for category, patterns in _SUSPICIOUS_LANGUAGE_PATTERNS.items():
+        matches: list[str] = []
+        for pattern in patterns:
+            m = re.search(pattern, body_text, re.IGNORECASE)
+            if m:
+                matches.append(m.group(0))
+
+        if matches:
+            findings.append(
+                Finding(
+                    check=f"suspicious_language_{category}",
+                    severity=Severity.MEDIUM,
+                    message=(
+                        f"'{category}' kategorisinde supheli ifade(ler) bulundu: "
+                        f"{', '.join(matches[:3])}"
+                    ),
+                )
+            )
+
+    return findings

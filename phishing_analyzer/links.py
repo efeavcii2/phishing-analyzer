@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from email.message import Message
 from html.parser import HTMLParser
@@ -84,3 +85,12 @@ def extract_links(html_body: str) -> list[ExtractedLink]:
     parser = _AnchorExtractor()
     parser.feed(html_body)
     return parser.links
+
+
+def html_to_text(html: str) -> str:
+    """Kaba bir HTML -> duz metin cevirisi (etiketleri siler).
+
+    Dil deseni aramasi icin yeterli; tam bir HTML render etmez.
+    """
+    text = re.sub(r"<[^>]+>", " ", html)
+    return re.sub(r"\s+", " ", text).strip()
